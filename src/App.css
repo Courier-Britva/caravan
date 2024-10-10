@@ -1,38 +1,146 @@
-.App {
+.background{
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: #282c34;
+}
+
+body{
+  background-color: #282c34;
+}
+
+.game{
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.deck{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.card{
+  min-width: 180px;
+  min-height: 260px;
+  background: #ffffff;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-suit{
+  position: absolute;
+  width: 24px;
+  height: 24px;
+}
+
+.card-suit-top{
+  top: 12px;
+  left: 12px;
+}
+
+.card-suit-bottom{
+  bottom: 12px;
+  right: 12px;
+  transform: rotate(180deg);
+}
+
+.card-value{
+  font-size: 48px;
+}
+
+.selection-name{
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.player-hand{
+  width: 100%;
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  max-width: 140px;
+  margin-top: 80px;
+}
+
+.player-hand>.card{
+  margin-top: -80px;
+}
+
+.caravan{
+  display: flex;
+}
+
+@media(max-width:768px){
+  .player-hand{
+    position: static;
+    display: flex;
+    overflow-x: scroll;
+    min-height: 260px;
+    margin-top: 20px;
+    margin-left: -20px;
+    width: 100vw;
+    max-width: unset;
+  }
+
+  .game-board{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+  }
+
+  
+  .player-hand>.card{
+    margin-top: unset;
+  }
+
+  .caravan{
+    overflow-x: scroll;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.score-board {
+  margin: 20px 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.score-board span {
+  display: block;
+  margin-bottom: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
