@@ -10,6 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
 
 .card_name{
@@ -36,6 +37,13 @@
 
 .cards_selector_container{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap: 10px;
+    max-width: 90vw;
+}
+
+.cards_selector_title{
+    margin-bottom: 36px;
+    display: block;
+    margin-top: 70px;
 }

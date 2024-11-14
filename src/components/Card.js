@@ -2,8 +2,6 @@ import React from 'react';
 import './components.css';
 
 function Card({ cardName, cardValue }) {
-    console.log(cardName);
-
     return (
         <div className='card_container'>
             <img src={cardName} className='card_name card_name_top' alt="card top"/>
