@@ -44,22 +44,34 @@ function Layout({ selectedCards, imageMap }) {
         if (selectedCard) {
             setPlayerFields((prevFields) => {
                 const updatedFields = [...prevFields];
+    
+                if (
+                    updatedFields[fieldIndex].length === 0 &&
+                    ['J', 'K', 'Q'].includes(selectedCard.value)
+                ) {
+                    return prevFields;
+                }
+    
                 updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
     
                 for (let i = 0; i < updatedFields.length; i++) {
-                    const sum = updatedFields[i].reduce((acc, card) => acc + parseInt(card.value, 10), 0);
+                    const sum = updatedFields[i].reduce(
+                        (acc, card) => acc + (parseInt(card.value, 10) || 0),
+                        0
+                    );
                     if (sum > 26) {
-                        updatedFields[i] = []; 
+                        updatedFields[i] = [];
                     }
                 }
     
+                removeCardFromInventory(selectedCard);
+                setSelectedCard(null);
+    
                 return updatedFields;
             });
-    
-            removeCardFromInventory(selectedCard);
-            setSelectedCard(null);
         }
     };
+    
     
 
     const handleLayoutClick = (e) => {
