@@ -39,11 +39,28 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap: 10px;
-    max-width: 90vw;
+    max-width: 35vw;
+}
+
+.cards_selector_table{
+    display: flex;
+    gap: 100px;
+    justify-content: space-between;
 }
 
 .cards_selector_title{
     margin-bottom: 36px;
     display: block;
     margin-top: 70px;
+}
+
+.cards_selector_head{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cards_selector_head__link{
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
 }

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import Card from './Card.js';
+import Layout from './Layout.js';
+
 import club from './../img/club.png';
 import diamond from './../img/diamond.png';
 import heart from './../img/heart.png';
 import spade from './../img/spade.png';
-import Card from './Card.js';
 
 function Selector() {
     const valuesArr = ['6', '7', '8', '9', '10', 'J', 'K', 'Q'];
@@ -16,80 +18,121 @@ function Selector() {
         spade: spade,
     };
 
-    // State for available and selected cards
+
     const [availableCards, setAvailableCards] = useState(
         namesArr.flatMap(name => valuesArr.map(value => ({ name, value })))
     );
+    const[originalCards, setOriginalCards] = useState(availableCards)
     const [selectedCards, setSelectedCards] = useState([]);
+    const [isGame, setIsGame] = useState()
 
-    // Function to toggle cards between available and selected lists
-    function toggleCardSelection(name, value) {
+    function toggleCardSelection(name, value, status) {
+        if(selectedCards.length >= 20 && status === 'add') {
+            return
+        }
         const card = { name, value };
 
-        // If the card is in availableCards, move it to selectedCards
         if (availableCards.some(c => c.name === name && c.value === value)) {
             setAvailableCards(prevCards => prevCards.filter(c => c.name !== name || c.value !== value));
             setSelectedCards(prevCards => [...prevCards, card]);
         } 
-        // If the card is in selectedCards, move it back to availableCards
+
         else {
             setSelectedCards(prevCards => prevCards.filter(c => c.name !== name || c.value !== value));
             setAvailableCards(prevCards => [...prevCards, card]);
         }
     }
 
-    // Function to randomly select up to 20 cards from availableCards and add to selectedCards
+
     function randomSelectCards() {
-        if (availableCards.length === 0) return; // No cards left to select
-
-        const numToSelect = Math.min(20, availableCards.length); // Ensure we don't exceed the number of available cards
+        setSelectedCards([]);
+    
+        const numToSelect = Math.min(20, originalCards.length); 
         const selectedIndices = new Set();
-
-        // Pick unique random indices
+    
         while (selectedIndices.size < numToSelect) {
-            const randomIndex = Math.floor(Math.random() * availableCards.length);
+            const randomIndex = Math.floor(Math.random() * originalCards.length);
             selectedIndices.add(randomIndex);
         }
-
-        const newSelectedCards = Array.from(selectedIndices).map(index => availableCards[index]);
-        
-        setAvailableCards(prevCards => prevCards.filter((_, index) => !selectedIndices.has(index)));
-        setSelectedCards(prevCards => [...prevCards, ...newSelectedCards]);
+    
+        const newSelectedCards = Array.from(selectedIndices).map(index => originalCards[index]);
+    
+        setAvailableCards(originalCards.filter((_, index) => !selectedIndices.has(index))); 
+        setSelectedCards(newSelectedCards); 
+        setIsGame(true); 
     }
-
+    
+    function setGameBegin() {
+        if(selectedCards.length > 19) {
+            console.log(selectedCards)
+            setIsGame(true)
+        }
+    }
     return (
         <>
-            <p>Select 20 cards from Cards list or <button onClick={randomSelectCards} disabled={availableCards.length === 0}>Let lady Luck to decide</button>
-            </p>
-            <span className='cards_selector_title'>Cards list</span>
-            <div className='cards_selector_container'>
-                {availableCards.map(({ name, value }) => (
-                    <div
-                        key={`${name}-${value}`}
-                        onClick={() => toggleCardSelection(name, value)}
-                    >
-                        <Card 
-                            cardName={imageMap[name]} 
-                            cardValue={value}
-                        />
+        {!isGame && 
+            <>
+                <div className='cards_selector_head'>
+                    <p>Select 20 cards from Cards list or <button onClick={randomSelectCards}>Let lady Luck to decide</button>
+                    </p>
+                    <a  className='cards_selector_head__link' onClick={setGameBegin}>
+                        {(20 - selectedCards.length != 0) &&
+                            <>
+                                Press here once you ready. you need {20 - selectedCards.length} more cards for it
+                            </>
+                        }
+                        {(20 - selectedCards.length === 0) &&
+                            <>
+                                Press here once you ready.
+                            </>
+                        }
+                    </a>
+                </div>
+                <div className='cards_selector_table'>
+                    <div>
+                        <span className='cards_selector_title'>Cards list</span>
+                        <div className='cards_selector_container'>
+                            {availableCards.map(({ name, value }) => (
+                                <div
+                                    key={`${name}-${value}`}
+                                    onClick={() => toggleCardSelection(name, value, 'add')}
+                                >
+                                    <Card 
+                                        cardName={imageMap[name]} 
+                                        cardValue={value}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                ))}
-            </div>
+                    <div>
+                        <span className='cards_selector_title'>Selected Cards</span>
+                        <div className='cards_selector_container'>
+                            {selectedCards.map(({ name, value }) => (
+                                <div 
+                                    key={`${name}-${value}-selected`}
+                                    onClick={() => toggleCardSelection(name, value, 'remove')}
+                                >
+                                    <Card 
+                                        cardName={imageMap[name]} 
+                                        cardValue={value}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </>
+        }
 
-            <span className='cards_selector_title'>Selected Cards</span>
-            <div className='cards_selector_container'>
-                {selectedCards.map(({ name, value }) => (
-                    <div 
-                        key={`${name}-${value}-selected`}
-                        onClick={() => toggleCardSelection(name, value)}
-                    >
-                        <Card 
-                            cardName={imageMap[name]} 
-                            cardValue={value}
-                        />
-                    </div>
-                ))}
-            </div>
+        {isGame &&
+            <>
+                <Layout
+                    selectedCards={selectedCards}
+                    imageMap={imageMap}
+                />
+            </>
+        }
         </>
     );
 }
