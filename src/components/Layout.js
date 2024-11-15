@@ -20,29 +20,47 @@ function Layout({ selectedCards, imageMap }) {
             )
         );
     };
-
     const handleEnemyFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setEnemyFields((prevFields) => {
                 const updatedFields = [...prevFields];
                 updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+    
+                for (let i = 0; i < updatedFields.length; i++) {
+                    const sum = updatedFields[i].reduce((acc, card) => acc + parseInt(card.value, 10), 0);
+                    if (sum > 26) {
+                        updatedFields[i] = []; 
+                    }
+                }
+    
                 return updatedFields;
             });
+    
             setSelectedCard(null);
         }
     };
-
+    
     const handlePlayerFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setPlayerFields((prevFields) => {
                 const updatedFields = [...prevFields];
                 updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+    
+                for (let i = 0; i < updatedFields.length; i++) {
+                    const sum = updatedFields[i].reduce((acc, card) => acc + parseInt(card.value, 10), 0);
+                    if (sum > 26) {
+                        updatedFields[i] = []; 
+                    }
+                }
+    
                 return updatedFields;
             });
-            removeCardFromInventory(selectedCard); 
+    
+            removeCardFromInventory(selectedCard);
             setSelectedCard(null);
         }
     };
+    
 
     const handleLayoutClick = (e) => {
         if (!e.target.closest('.field')) {
