@@ -340,6 +340,18 @@ function Layout({ selectedCards, imageMap, resetGame }) {
     useEffect(() => {
         isGameEndsFunc();
     }, [playerFields, enemyFields]);
+
+    const isInvEmpty = () => { 
+        if (playerInventory.length === 0) {
+            isGameOver(true);
+            setGameWinner("The game was ended before someone got all Caravans ready");
+        }
+    };
+    
+    useEffect(() => {
+        isInvEmpty();
+    }, [playerInventory]); 
+    
     function isGameEndsFunc() {
         const calculateFieldScore = (field) =>
             field.reduce(
@@ -361,11 +373,11 @@ function Layout({ selectedCards, imageMap, resetGame }) {
     
         if (allPlayerFieldsAbove21) {
             isGameOver(true);
-            setGameWinner("YOU");
+            setGameWinner("YOU win!");
         }
         if (allEnemyFieldsAbove21) {
             isGameOver(true);
-            setGameWinner("AI");
+            setGameWinner("AI win!");
         }
     }
     const enemyTurn = () => {
@@ -373,24 +385,18 @@ function Layout({ selectedCards, imageMap, resetGame }) {
             const updatedFields = [...prevFields];
             let cardPlayed = false;
     
-            const bestMove = determineBestMove(enemyInventory, updatedFields, playerFields);
+            for (const card of enemyInventory) {
+                for (let fieldIndex = 0; fieldIndex < updatedFields.length; fieldIndex++) {
+                    const field = updatedFields[fieldIndex];
+                    console.log(`AI is attempting to play card: ${card.name} ${card.value} on field ${fieldIndex}`);
     
-            console.log("Enemy Inventory:", enemyInventory);
-            console.log("Best Move:", bestMove);
+                    if (field.length === 0 && ['J', 'K', 'Q'].includes(card.value)) {
+                        // Skip J, K, Q if the field is empty
+                        console.log("Cannot place J, K, or Q on an empty field.");
+                        continue;
+                    }
     
-            if (bestMove) {
-                const { card, fieldIndex } = bestMove;
-                const field = updatedFields[fieldIndex];
-    
-                console.log("AI is attempting to play card:", card, "on field:", fieldIndex);
-    
-                // Check if we are trying to place J, K, or Q on an empty field
-                if (field.length === 0 && ['J', 'K', 'Q'].includes(card.value)) {
-                    console.log("Cannot place J, K, or Q on an empty field.");
-                } else {
-                    // Proceed with attempting to place the card
                     if (card.value === 'J' && field.length > 0) {
-                        // Logic for J card
                         let lastNumberIndex = -1;
                         for (let i = field.length - 1; i >= 0; i--) {
                             if (!isNaN(parseInt(field[i].value, 10))) {
@@ -399,14 +405,13 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                             }
                         }
                         if (lastNumberIndex !== -1) {
-                            updatedFields[fieldIndex] = field.slice(0, lastNumberIndex).filter((card) => {
-                                const isNamedCard = ['J', 'K', 'Q'].includes(card.value);
-                                return !(isNamedCard && field.indexOf(card) < lastNumberIndex);
+                            updatedFields[fieldIndex] = field.slice(0, lastNumberIndex).filter((c) => {
+                                const isNamedCard = ['J', 'K', 'Q'].includes(c.value);
+                                return !(isNamedCard && field.indexOf(c) < lastNumberIndex);
                             });
                             cardPlayed = true;
                         }
                     } else if (card.value === 'K' && field.length > 0) {
-                        // Logic for K card
                         let lastNumberIndex = -1;
                         for (let i = field.length - 1; i >= 0; i--) {
                             if (!isNaN(parseInt(field[i].value, 10))) {
@@ -419,7 +424,7 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                             const lastCardValue = parseInt(lastCard.logicValue || lastCard.value, 10);
                             if (!lastCardValue || isNaN(lastCardValue)) {
                                 console.log("Cannot place K without a number to double.");
-                                return prevFields;
+                                continue;
                             }
                             const multipliedValue = lastCardValue * 2;
                             const updatedLastCard = { ...lastCard, logicValue: multipliedValue.toString() };
@@ -432,7 +437,6 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                             cardPlayed = true;
                         }
                     } else if (card.value === 'Q' && field.length > 0) {
-                        // Logic for Q card
                         let lastNumberIndex = -1;
                         for (let i = field.length - 1; i >= 0; i--) {
                             if (!isNaN(parseInt(field[i].value, 10))) {
@@ -450,17 +454,16 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                             cardPlayed = true;
                         }
                     } else if (field.length > 1) {
-                        // Logic for regular number card with direction checking
                         const direction = field[field.length - 1].isAscending !== false;
                         const lastCardValue = parseInt(field[field.length - 1].logicValue || field[field.length - 1].value, 10);
                         const cardValue = parseInt(card.value, 10);
                         if (direction && cardValue <= lastCardValue) {
                             console.log("Card does not fit ascending order.");
-                            return prevFields;
+                            continue;
                         }
                         if (!direction && cardValue >= lastCardValue) {
                             console.log("Card does not fit descending order.");
-                            return prevFields;
+                            continue;
                         }
                         updatedFields[fieldIndex] = [...field, card];
                         cardPlayed = true;
@@ -470,66 +473,34 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                     }
     
                     if (cardPlayed) {
-                        console.log("AI successfully played card:", card, "on field:", fieldIndex);
+                        console.log(`AI successfully played card: ${card.name} ${card.value} on field ${fieldIndex}`);
                         setEnemyInventory((prevInventory) =>
                             prevInventory.filter((c) => c !== card)
                         );
+
+                        updatedFields.forEach((field, i) => {
+                            const fieldSum = field.reduce(
+                                (acc, card) => acc + (parseInt(card.logicValue || card.value, 10) || 0),
+                                0
+                            );
+                            if (fieldSum > 26) {
+                                updatedFields[i] = [];
+                            }
+                        });
+                        
                         return updatedFields;
                     }
                 }
             }
     
-            // Fallback logic: Try placing the smallest numbered card on an empty field
             if (!cardPlayed) {
-                const smallestCard = enemyInventory
-                    .filter((c) => !isNaN(parseInt(c.value, 10))) // Filter only numbered cards
-                    .sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10))[0]; // Get smallest card
-    
-                if (smallestCard) {
-                    for (let i = 0; i < updatedFields.length; i++) {
-                        if (updatedFields[i].length === 0) { // Find an empty field
-                            updatedFields[i] = [smallestCard];
-                            setEnemyInventory((prevInventory) =>
-                                prevInventory.filter((c) => c !== smallestCard)
-                            );
-                            console.log("Fallback: AI placed smallest card:", smallestCard, "on field:", i);
-                            cardPlayed = true;
-                            break;
-                        }
-                    }
-                }
+                console.log("AI failed to play any card, despite trying all cards.");
             }
     
-            if (!cardPlayed) {
-                console.log("AI failed to play any card.");
-            }
-    
-            return updatedFields;
+            return prevFields;
         });
     };
-    
-    
-
-    const determineBestMove = (enemyInventory, enemyFields, playerFields) => {
-        for (const card of enemyInventory) {
-            for (let i = 0; i < enemyFields.length; i++) {
-                const field = enemyFields[i];
-    
-                if (
-                    field.length === 0 ||
-                    card.value === 'J' ||
-                    card.value === 'Q' ||
-                    card.value === 'K' ||
-                    parseInt(card.value, 10) > parseInt(field[field.length - 1]?.value || 0)
-                ) {
-                    return { card, fieldIndex: i };
-                }
-            }
-        }
-        return null;
-    };
-    
-    
+        
 
     const handleLayoutClick = (e) => {
         if (!e.target.closest('.field')) {
@@ -586,7 +557,7 @@ function Layout({ selectedCards, imageMap, resetGame }) {
             </div>
             {gameOver && 
                 <div className="winPopup">
-                    <span> {gameWinner} win! </span>
+                    <span> {gameWinner} </span>
                     <NavLink to='/'  onClick={resetGame} > Again </NavLink>
                 </div>
             }
