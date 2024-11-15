@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/caravan/static/css/main.e8147230.css",
-    "main.js": "/caravan/static/js/main.813c97e1.js",
+    "main.js": "/caravan/static/js/main.c736008d.js",
     "static/media/bg.png": "/caravan/static/media/bg.42fc9bf838fd67243de2.png",
     "index.html": "/caravan/index.html",
     "main.e8147230.css.map": "/caravan/static/css/main.e8147230.css.map",
-    "main.813c97e1.js.map": "/caravan/static/js/main.813c97e1.js.map"
+    "main.c736008d.js.map": "/caravan/static/js/main.c736008d.js.map"
   },
   "entrypoints": [
     "static/css/main.e8147230.css",
-    "static/js/main.813c97e1.js"
+    "static/js/main.c736008d.js"
   ]
 }
