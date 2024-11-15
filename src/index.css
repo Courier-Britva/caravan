@@ -7,7 +7,15 @@
 	font-family: 'VT323', Courier;
 }
 
-p,span{
+html{
+  overflow-x: hidden;
+}
+
+body{
+  overflow-x: hidden;
+}
+
+p,span,a{
     color: #cfc228;;
 }
 
@@ -120,4 +128,27 @@ p,span{
   z-index: 2;
   background-image: url(./img/bg.png);
   background-size: 100% 100%;
+}
+
+.cards_selector_container_selected{
+  max-width: 30vw;
+}
+
+.cards_selector_head__text{
+  font-size: 48px;
+  display: block;
+  margin-top: 20px;
+}
+
+.cards_selector_head__button{
+  font-size: 36px;
+}
+
+.cards_selector_counter{
+  position: fixed;
+  top: 20px;
+  right: 50px;
+  color: #cfc228;
+  font-size: 36px;
+  z-index: 2;
 }

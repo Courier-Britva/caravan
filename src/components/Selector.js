@@ -73,8 +73,9 @@ function Selector() {
         {!isGame && 
             <>
                 <div className='cards_selector_head'>
-                    <p>Select 20 cards from Cards list or <button onClick={randomSelectCards}>Let lady Luck to decide</button>
-                    </p>
+                    <div className='cards_selector_counter'>
+                        {selectedCards.length}/20
+                    </div>
                     <a  className='cards_selector_head__link' onClick={setGameBegin}>
                         {(20 - selectedCards.length != 0) &&
                             <>
@@ -87,6 +88,19 @@ function Selector() {
                             </>
                         }
                     </a>
+                    <p  className='cards_selector_head__text'>
+                    {(20 - selectedCards.length != 0) &&
+                            <>
+                                Select 20 cards from Cards list or <button   className='cards_selector_head__button' onClick={randomSelectCards}>Let lady Luck to decide</button>
+                            </>
+                        }
+                        
+                        {(20 - selectedCards.length === 0) &&
+                            <>
+                                or <button   className='cards_selector_head__button' onClick={randomSelectCards}>Let lady Luck to decide</button>
+                            </>
+                        }
+                    </p>
                 </div>
                 <div className='cards_selector_table'>
                     <div>
@@ -106,8 +120,8 @@ function Selector() {
                         </div>
                     </div>
                     <div>
-                        <span className='cards_selector_title'>Selected Cards</span>
-                        <div className='cards_selector_container'>
+                        <span className='cards_selector_title cards_selector_title_selected'>Selected Cards</span>
+                        <div className='cards_selector_container cards_selector_container_selected'>
                             {selectedCards.map(({ name, value }) => (
                                 <div 
                                     key={`${name}-${value}-selected`}

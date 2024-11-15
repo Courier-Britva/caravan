@@ -55,8 +55,7 @@
 
 .cards_selector_table{
     display: flex;
-    gap: 100px;
-    justify-content: space-between;
+    gap: 200px;
     padding: 60px;
 }
 
@@ -69,12 +68,16 @@
 .cards_selector_head{
     display: flex;
     justify-content: space-between;
+    margin-top: 120px;
+    margin-left: 60px;
+    margin-right: 60px;
+    flex-direction: column;
 }
 
 .cards_selector_head__link{
-    color: #fff;
     cursor: pointer;
     user-select: none;
+    font-size: 64px;
 }
 
 .cards-selector{
@@ -122,3 +125,27 @@
     margin-bottom: 120px;
     margin-top: 24px;
 }
+
+
+@media(max-width:680px){
+    .cards_selector_container{
+        max-width: 70vw;
+    }
+    .cards_selector_container_selected{
+      position: fixed;
+      bottom: 0;
+      display: flex;
+      left: 0;
+      overflow-x: scroll;
+      width: 100vw;
+      max-width: 100vw;
+    }
+
+    .cards_selector_title_selected{
+        display: none;
+    }
+
+    .cards_selector_table{
+        padding: 10px;
+    }
+  }
