@@ -20,7 +20,6 @@ function Layout({ selectedCards, imageMap }) {
             )
         );
     };
-
     const handlePlayerFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setPlayerFields((prevFields) => {
@@ -60,47 +59,43 @@ function Layout({ selectedCards, imageMap }) {
                         { ...selectedCard },
                     ];
                     cardWasPlaced = true;
+                } else if (selectedCard.value === 'Q' && field.length > 1) {
+                    const lastCardValue = parseInt(
+                        field[field.length - 1].logicValue || field[field.length - 1].value,
+                        10
+                    );
+                    const secondLastCardValue = parseInt(
+                        field[field.length - 2].logicValue || field[field.length - 2].value,
+                        10
+                    );
+    
+                    if (!lastCardValue || !secondLastCardValue) {
+                        return prevFields;
+                    }
+    
+                    const isAscending = lastCardValue > secondLastCardValue;
+                    const reversedDirectionCard = { ...selectedCard, isAscending: !isAscending };
+    
+                    updatedFields[fieldIndex] = [...field, reversedDirectionCard];
+                    cardWasPlaced = true;
                 } else if (field.length > 1) {
-                    const firstCardValue = parseInt(field[0].value, 10);
-                    const secondCardValue = parseInt(field[1].value, 10);
+                    const direction = field[field.length - 1].isAscending !== false;
+                    const lastCardValue = parseInt(
+                        field[field.length - 1].logicValue || field[field.length - 1].value,
+                        10
+                    );
                     const selectedCardValue = parseInt(selectedCard.value, 10);
     
                     if (!selectedCardValue || isNaN(selectedCardValue)) {
                         return prevFields;
                     }
     
-                    if (secondCardValue > firstCardValue) {
-                        const valid = field.every((card, index) => {
-                            if (index === 0) return true;
-                            const prevCardValue = parseInt(
-                                card.logicValue || card.value,
-                                10
-                            );
-                            const currCardValue = parseInt(
-                                field[index - 1].logicValue || field[index - 1].value,
-                                10
-                            );
-                            return prevCardValue > currCardValue;
-                        });
-                        if (!valid || selectedCardValue <= secondCardValue) {
-                            return prevFields;
-                        }
-                    } else if (secondCardValue < firstCardValue) {
-                        const valid = field.every((card, index) => {
-                            if (index === 0) return true;
-                            const prevCardValue = parseInt(
-                                card.logicValue || card.value,
-                                10
-                            );
-                            const currCardValue = parseInt(
-                                field[index - 1].logicValue || field[index - 1].value,
-                                10
-                            );
-                            return prevCardValue < currCardValue;
-                        });
-                        if (!valid || selectedCardValue >= secondCardValue) {
-                            return prevFields;
-                        }
+                    if (direction && selectedCardValue <= lastCardValue) {
+                        return prevFields;
+                    }
+    
+                    if (!direction && selectedCardValue >= lastCardValue) {
+                        return prevFields;
                     }
     
                     updatedFields[fieldIndex] = [...field, selectedCard];
@@ -129,7 +124,7 @@ function Layout({ selectedCards, imageMap }) {
                 return updatedFields;
             });
         }
-    };   
+    };
     const handleEnemyFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setEnemyFields((prevFields) => {
@@ -169,47 +164,43 @@ function Layout({ selectedCards, imageMap }) {
                         { ...selectedCard },
                     ];
                     cardWasPlaced = true;
+                } else if (selectedCard.value === 'Q' && field.length > 1) {
+                    const lastCardValue = parseInt(
+                        field[field.length - 1].logicValue || field[field.length - 1].value,
+                        10
+                    );
+                    const secondLastCardValue = parseInt(
+                        field[field.length - 2].logicValue || field[field.length - 2].value,
+                        10
+                    );
+    
+                    if (!lastCardValue || !secondLastCardValue) {
+                        return prevFields;
+                    }
+    
+                    const isAscending = lastCardValue > secondLastCardValue;
+                    const reversedDirectionCard = { ...selectedCard, isAscending: !isAscending };
+    
+                    updatedFields[fieldIndex] = [...field, reversedDirectionCard];
+                    cardWasPlaced = true;
                 } else if (field.length > 1) {
-                    const firstCardValue = parseInt(field[0].value, 10);
-                    const secondCardValue = parseInt(field[1].value, 10);
+                    const direction = field[field.length - 1].isAscending !== false;
+                    const lastCardValue = parseInt(
+                        field[field.length - 1].logicValue || field[field.length - 1].value,
+                        10
+                    );
                     const selectedCardValue = parseInt(selectedCard.value, 10);
     
                     if (!selectedCardValue || isNaN(selectedCardValue)) {
                         return prevFields;
                     }
     
-                    if (secondCardValue > firstCardValue) {
-                        const valid = field.every((card, index) => {
-                            if (index === 0) return true;
-                            const prevCardValue = parseInt(
-                                card.logicValue || card.value,
-                                10
-                            );
-                            const currCardValue = parseInt(
-                                field[index - 1].logicValue || field[index - 1].value,
-                                10
-                            );
-                            return prevCardValue > currCardValue;
-                        });
-                        if (!valid || selectedCardValue <= secondCardValue) {
-                            return prevFields;
-                        }
-                    } else if (secondCardValue < firstCardValue) {
-                        const valid = field.every((card, index) => {
-                            if (index === 0) return true;
-                            const prevCardValue = parseInt(
-                                card.logicValue || card.value,
-                                10
-                            );
-                            const currCardValue = parseInt(
-                                field[index - 1].logicValue || field[index - 1].value,
-                                10
-                            );
-                            return prevCardValue < currCardValue;
-                        });
-                        if (!valid || selectedCardValue >= secondCardValue) {
-                            return prevFields;
-                        }
+                    if (direction && selectedCardValue <= lastCardValue) {
+                        return prevFields;
+                    }
+    
+                    if (!direction && selectedCardValue >= lastCardValue) {
+                        return prevFields;
                     }
     
                     updatedFields[fieldIndex] = [...field, selectedCard];
@@ -238,8 +229,7 @@ function Layout({ selectedCards, imageMap }) {
                 return updatedFields;
             });
         }
-    };   
-    
+    };
 
     const handleLayoutClick = (e) => {
         if (!e.target.closest('.field')) {
