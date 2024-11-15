@@ -127,6 +127,14 @@
 }
 
 
+@media(max-width:1200px){
+    @media(min-width:680px){
+        .cards_selector_container_selected{
+            max-width: 20vw;
+        }
+    }
+}
+
 @media(max-width:680px){
     .cards_selector_container{
         max-width: 70vw;
@@ -139,6 +147,9 @@
       overflow-x: scroll;
       width: 100vw;
       max-width: 100vw;
+      transform: translateY(80px);
+      background-color: #000;
+      padding-top: 12px;
     }
 
     .cards_selector_title_selected{
@@ -149,3 +160,4 @@
         padding: 10px;
     }
   }
+
