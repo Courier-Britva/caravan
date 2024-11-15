@@ -20,27 +20,47 @@ function Layout({ selectedCards, imageMap }) {
             )
         );
     };
-;
 
-    
+
     const handlePlayerFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setPlayerFields((prevFields) => {
                 const updatedFields = [...prevFields];
-    
+
                 if (
                     updatedFields[fieldIndex].length === 0 &&
                     ['J', 'K', 'Q'].includes(selectedCard.value)
                 ) {
                     return prevFields;
                 }
-    
-                if (selectedCard.value === 'J' && updatedFields[fieldIndex].length > 0) {
-                    updatedFields[fieldIndex].pop();
+
+                const field = updatedFields[fieldIndex];
+                let cardWasPlaced = false;
+
+                if (selectedCard.value === 'J' && field.length > 0) {
+                    updatedFields[fieldIndex] = field.slice(0, -1); 
+                    cardWasPlaced = true;
+                } else if (field.length > 1) {
+                    const firstCardValue = parseInt(field[0].value, 10);
+                    const secondCardValue = parseInt(field[1].value, 10);
+                    const selectedCardValue = parseInt(selectedCard.value, 10);
+
+                    if (!selectedCardValue || isNaN(selectedCardValue)) {
+                        return prevFields;
+                    }
+
+                    if (secondCardValue > firstCardValue && selectedCardValue > secondCardValue) {
+                        updatedFields[fieldIndex] = [...field, selectedCard];
+                        cardWasPlaced = true;
+                    } else if (secondCardValue < firstCardValue && selectedCardValue < secondCardValue) {
+                        updatedFields[fieldIndex] = [...field, selectedCard];
+                        cardWasPlaced = true;
+                    }
                 } else {
-                    updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+                    updatedFields[fieldIndex] = [...field, selectedCard];
+                    cardWasPlaced = true;
                 }
-    
+
                 for (let i = 0; i < updatedFields.length; i++) {
                     const sum = updatedFields[i].reduce(
                         (acc, card) => acc + (parseInt(card.value, 10) || 0),
@@ -50,32 +70,55 @@ function Layout({ selectedCards, imageMap }) {
                         updatedFields[i] = [];
                     }
                 }
-    
+
+                if (cardWasPlaced) {
+                    removeCardFromInventory(selectedCard);
+                    setSelectedCard(null);
+                }
+
                 return updatedFields;
             });
-    
-            removeCardFromInventory(selectedCard); // Ensure the card is removed from inventory
-            setSelectedCard(null);
         }
     };
     const handleEnemyFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setEnemyFields((prevFields) => {
                 const updatedFields = [...prevFields];
-    
+
                 if (
                     updatedFields[fieldIndex].length === 0 &&
                     ['J', 'K', 'Q'].includes(selectedCard.value)
                 ) {
                     return prevFields;
                 }
-    
-                if (selectedCard.value === 'J' && updatedFields[fieldIndex].length > 0) {
-                    updatedFields[fieldIndex].pop();
+
+                const field = updatedFields[fieldIndex];
+                let cardWasPlaced = false;
+
+                if (selectedCard.value === 'J' && field.length > 0) {
+                    updatedFields[fieldIndex] = field.slice(0, -1); 
+                    cardWasPlaced = true;
+                } else if (field.length > 1) {
+                    const firstCardValue = parseInt(field[0].value, 10);
+                    const secondCardValue = parseInt(field[1].value, 10);
+                    const selectedCardValue = parseInt(selectedCard.value, 10);
+
+                    if (!selectedCardValue || isNaN(selectedCardValue)) {
+                        return prevFields;
+                    }
+
+                    if (secondCardValue > firstCardValue && selectedCardValue > secondCardValue) {
+                        updatedFields[fieldIndex] = [...field, selectedCard];
+                        cardWasPlaced = true;
+                    } else if (secondCardValue < firstCardValue && selectedCardValue < secondCardValue) {
+                        updatedFields[fieldIndex] = [...field, selectedCard];
+                        cardWasPlaced = true;
+                    }
                 } else {
-                    updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+                    updatedFields[fieldIndex] = [...field, selectedCard];
+                    cardWasPlaced = true;
                 }
-    
+
                 for (let i = 0; i < updatedFields.length; i++) {
                     const sum = updatedFields[i].reduce(
                         (acc, card) => acc + (parseInt(card.value, 10) || 0),
@@ -85,15 +128,17 @@ function Layout({ selectedCards, imageMap }) {
                         updatedFields[i] = [];
                     }
                 }
-    
+
+                if (cardWasPlaced) {
+                    removeCardFromInventory(selectedCard);
+                    setSelectedCard(null);
+                }
+
                 return updatedFields;
             });
-    
-            removeCardFromInventory(selectedCard); // Ensure the card is removed from inventory
-            setSelectedCard(null);
         }
     };
-    
+
     
     
     
