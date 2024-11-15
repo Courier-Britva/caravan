@@ -13,6 +13,13 @@
     user-select: none;
 }
 
+.card-container{
+    transition: all .3s ease-in-out;
+}
+
+.selected-card{
+    transform: rotate(14deg) translateX(-20px) translateY(-25px);
+}
 .card_name{
     position: absolute;
     width: 40px;
