@@ -9,12 +9,10 @@ function Layout({ selectedCards, imageMap }) {
     const [playerFields, setPlayerFields] = useState([[], [], []]); 
     const [selectedCard, setSelectedCard] = useState(null);
 
-    // Handle card selection
     const handleCardClick = (card) => {
         setSelectedCard(card);
     };
 
-    // Remove card from inventory
     const removeCardFromInventory = (cardToRemove) => {
         setPlayerInventory((prevInventory) =>
             prevInventory.filter(
@@ -23,7 +21,6 @@ function Layout({ selectedCards, imageMap }) {
         );
     };
 
-    // Handle placing a card on an enemy field
     const handleEnemyFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setEnemyFields((prevFields) => {
@@ -35,7 +32,6 @@ function Layout({ selectedCards, imageMap }) {
         }
     };
 
-    // Handle placing a card on a player field
     const handlePlayerFieldClick = (fieldIndex) => {
         if (selectedCard) {
             setPlayerFields((prevFields) => {
@@ -43,12 +39,11 @@ function Layout({ selectedCards, imageMap }) {
                 updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
                 return updatedFields;
             });
-            removeCardFromInventory(selectedCard); // Remove the card from the player's inventory
+            removeCardFromInventory(selectedCard); 
             setSelectedCard(null);
         }
     };
 
-    // Deselect card if clicking outside of fields
     const handleLayoutClick = (e) => {
         if (!e.target.closest('.field')) {
             setSelectedCard(null);
@@ -89,7 +84,7 @@ function Layout({ selectedCards, imageMap }) {
                             selectedCard?.name === name && selectedCard?.value === value
                                 ? 'selected-card'
                                 : ''
-                        }`} // Add custom class for selected card
+                        }`} 
                         onClick={(e) => {
                             e.stopPropagation();
                             handleCardClick({ name, value });
