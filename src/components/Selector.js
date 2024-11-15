@@ -128,6 +128,7 @@ function Selector() {
         {isGame &&
             <>
                 <Layout
+                    setSelectedCards={setSelectedCards}
                     selectedCards={selectedCards}
                     imageMap={imageMap}
                 />
