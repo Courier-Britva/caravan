@@ -33,11 +33,22 @@
     text-align: center;
     font-size: 48px;
     color: #000;
+    position: absolute;
+    top: 50px;
+    left: 15px;
+}
+
+.card_value_bottom{
+    bottom: 50px;
+    right: 18px;
+    top: unset;
+    left: unset;
+    transform: rotate(180deg);
 }
 
 .cards_selector_container{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: 10px;
     max-width: 35vw;
 }
@@ -46,6 +57,7 @@
     display: flex;
     gap: 100px;
     justify-content: space-between;
+    padding: 60px;
 }
 
 .cards_selector_title{
@@ -75,14 +87,27 @@
     margin-bottom: 60px;
 }
 
+.field{
+    transition: all .3s ease-in-out;
+    border: 1px solid #000;
+    box-shadow: 1px 2px 1px 0px;
+    border-radius: 12px;
+}
+
+.highlight{
+    border: 1px solid #FFBF00;
+    box-shadow: unset;
+}
+
 .field-cards{
     max-width: 360px;
     max-height: 260px;
     min-width: 360px;
     min-height: 260px;
     border-radius: 12px;
-    border: 1px solid #000;
-    box-shadow: 1px 1px 1px 1px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 10px;
 }
 
 .fields_elements_container{

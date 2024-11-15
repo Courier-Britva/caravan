@@ -1,0 +1,47 @@
+.data_container{
+    margin: 20px;
+    padding: 12px;
+}
+
+.notes_head{
+    font-size: 96px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 100px;
+}
+
+.data_head{
+    position: fixed;
+    top: 20px;
+    justify-content: flex-end;
+    display: flex;
+    gap: 24px;
+    padding-right: 24px;
+    background: #000;
+    right: 0;
+    width: 100vw;
+}
+
+.data_element_container{
+    display: flex;
+    gap: 6px;
+    color: #cfc228;
+}
+
+@media(max-width:650px) {
+    .data_head{
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}
+
+.data_body{
+    margin-top: 120px;
+}
+  
+
+@media(max-width:680px){
+    .note_element{
+        min-width: 380px;
+    }
+}

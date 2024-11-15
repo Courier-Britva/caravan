@@ -1,6 +1,20 @@
 import React from 'react';
+import Card from './Card';
 
-function Field({ fieldIndex, isHighlighted, onFieldClick, cards }) {
+import club from './../img/club.png';
+import diamond from './../img/diamond.png';
+import heart from './../img/heart.png';
+import spade from './../img/spade.png';
+
+function Field({  isHighlighted, onFieldClick, cards }) {
+    
+    const imageMap = {
+        club: club,
+        diamond: diamond,
+        heart: heart,
+        spade: spade,
+    };
+
     return (
         <div
             className={`field ${isHighlighted ? 'highlight' : ''}`} 
@@ -11,9 +25,10 @@ function Field({ fieldIndex, isHighlighted, onFieldClick, cards }) {
         >
             <div className="field-cards">
                 {cards.map(({ name, value }, index) => (
-                    <div key={`${name}-${value}-${index}`}>
-                        {name} {value}
-                    </div>
+                    <Card 
+                        cardName={imageMap[name]} 
+                        cardValue={value}
+                    />
                 ))}
             </div>
         </div>
