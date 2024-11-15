@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Field from './Field';
 import './components.css';
 import Card from './Card';
+import { NavLink } from 'react-router-dom';
 
-function Layout({ selectedCards, imageMap }) {
+function Layout({ selectedCards, imageMap, resetGame }) {
     const [playerInventory, setPlayerInventory] = useState([...selectedCards]);
     const [enemyFields, setEnemyFields] = useState([[], [], []]);  
     const [playerFields, setPlayerFields] = useState([[], [], []]); 
     const [selectedCard, setSelectedCard] = useState(null);
+    const [gameOver, isGameOver] = useState(false);
+    const [gameWinner, setGameWinner] = useState(null);
+
 
     const handleCardClick = (card) => {
         setSelectedCard(card);
@@ -319,11 +323,48 @@ function Layout({ selectedCards, imageMap }) {
                     removeCardFromInventory(selectedCard);
                     setSelectedCard(null);
                 }
-    
+                
+                
                 return updatedFields;
             });
         }
     };
+
+    useEffect(() => {
+        isGameEndsFunc();
+    }, [playerFields, enemyFields]);
+    function isGameEndsFunc() {
+        const calculateFieldScore = (field) =>
+            field.reduce(
+                (acc, card, index, arr) => {
+                    if (arr[index - 1] && arr[index - 1].value === 'K') {
+                        const lastCardValue = parseInt(card.logicValue || card.value, 10) || 0;
+                        return acc + lastCardValue * 2;
+                    }
+                    return acc + (parseInt(card.logicValue || card.value, 10) || 0);
+                },
+                0
+            );
+    
+        const playerScores = playerFields.map((field) => calculateFieldScore(field));
+        const enemyScores = enemyFields.map((field) => calculateFieldScore(field));
+    
+        console.log("Player Scores:", playerScores);
+        console.log("Enemy Scores:", enemyScores);
+    
+        const allPlayerFieldsAbove21 = playerScores.every((score) => score > 21);
+        const allEnemyFieldsAbove21 = enemyScores.every((score) => score > 21);
+    
+        if (allPlayerFieldsAbove21) {
+            isGameOver(true);
+            setGameWinner("YOU");
+        }
+        if (allEnemyFieldsAbove21) {
+            isGameOver(true);
+            setGameWinner("AI");
+        }
+    }
+    
 
     const handleLayoutClick = (e) => {
         if (!e.target.closest('.field')) {
@@ -378,6 +419,12 @@ function Layout({ selectedCards, imageMap }) {
                     </div>
                 ))}
             </div>
+            {gameOver && 
+                <div className="winPopup">
+                    <span> {gameWinner} win! </span>
+                    <NavLink to='/'  onClick={resetGame} > Again </NavLink>
+                </div>
+            }
         </div>
     );
 }

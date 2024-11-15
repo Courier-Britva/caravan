@@ -134,6 +134,22 @@
     margin-top: 24px;
 }
 
+.winPopup{
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 48px;
+    display: flex;
+    color: #e4d414;
+    background: #000;
+    padding: 12px 24px;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 
 @media(max-width:1200px){
     @media(min-width:680px){

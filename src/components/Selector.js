@@ -68,6 +68,12 @@ function Selector() {
             setIsGame(true)
         }
     }
+
+    const resetGame = () => {
+        setIsGame(false)
+        setSelectedCards([])
+        setAvailableCards(originalCards)
+    }
     return (
         <>
         {!isGame && 
@@ -145,6 +151,7 @@ function Selector() {
                     setSelectedCards={setSelectedCards}
                     selectedCards={selectedCards}
                     imageMap={imageMap}
+                    resetGame={resetGame}
                 />
             </>
         }
