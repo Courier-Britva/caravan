@@ -1,7 +1,7 @@
 .data_container{
     margin: 20px;
     padding: 12px;
-    padding-top: 120px;
+    padding-bottom: 120px;
 }
 
 .notes_head{
@@ -32,7 +32,9 @@
 @media(max-width:650px) {
     .data_head{
         flex-direction: column;
+        padding-top: 30px;
         align-items: flex-end;
+        transform: translateY(-30px);
     }
 }
 

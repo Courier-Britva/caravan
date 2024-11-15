@@ -487,7 +487,7 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                                 updatedFields[i] = [];
                             }
                         });
-                        
+
                         return updatedFields;
                     }
                 }
@@ -534,7 +534,7 @@ function Layout({ selectedCards, imageMap, resetGame }) {
                     ))}
                 </div>
             </div>
-            <div className="cards-selector cards_selector_container">
+            <div className="cards-selector cards_selector_container cards_selector_container_layout">
                 {playerInventory.map(({ name, value }) => (
                     <div
                         key={`${name}-${value}`}
