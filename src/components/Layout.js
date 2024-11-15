@@ -36,48 +36,95 @@ function Layout({ selectedCards, imageMap }) {
                 let cardWasPlaced = false;
     
                 if (selectedCard.value === 'J' && field.length > 0) {
-                    updatedFields[fieldIndex] = field.slice(0, -1);
-                    cardWasPlaced = true;
+                    let lastNumberIndex = -1;
+    
+                    for (let i = field.length - 1; i >= 0; i--) {
+                        if (!isNaN(parseInt(field[i].value, 10))) {
+                            lastNumberIndex = i;
+                            break;
+                        }
+                    }
+    
+                    if (lastNumberIndex !== -1) {
+                        updatedFields[fieldIndex] = field.slice(0, lastNumberIndex).filter((card) => {
+                            const isNamedCard = ['J', 'K', 'Q'].includes(card.value);
+                            return !(isNamedCard && field.indexOf(card) < lastNumberIndex);
+                        });
+                        cardWasPlaced = true;
+                    }
                 } else if (selectedCard.value === 'K' && field.length > 0) {
-                    const lastCard = field[field.length - 1];
-                    const lastCardValue = parseInt(lastCard.logicValue || lastCard.value, 10);
+                    let lastNumberIndex = -1;
     
-                    if (!lastCardValue || isNaN(lastCardValue)) {
-                        return prevFields;
+                    for (let i = field.length - 1; i >= 0; i--) {
+                        if (!isNaN(parseInt(field[i].value, 10))) {
+                            lastNumberIndex = i;
+                            break;
+                        }
                     }
     
-                    const doubledValue = lastCardValue * 2;
+                    if (lastNumberIndex !== -1) {
+                        const lastCard = field[lastNumberIndex];
+                        const lastCardValue = parseInt(lastCard.logicValue || lastCard.value, 10);
     
-                    const updatedLastCard = {
-                        ...lastCard,
-                        logicValue: doubledValue.toString(),
-                    };
+                        if (!lastCardValue || isNaN(lastCardValue)) {
+                            return prevFields;
+                        }
     
-                    updatedFields[fieldIndex] = [
-                        ...field.slice(0, -1),
-                        updatedLastCard,
-                        { ...selectedCard },
-                    ];
-                    cardWasPlaced = true;
-                } else if (selectedCard.value === 'Q' && field.length > 1) {
-                    const lastCardValue = parseInt(
-                        field[field.length - 1].logicValue || field[field.length - 1].value,
-                        10
-                    );
-                    const secondLastCardValue = parseInt(
-                        field[field.length - 2].logicValue || field[field.length - 2].value,
-                        10
-                    );
+                        const multipliedValue = lastCardValue * 2;
     
-                    if (!lastCardValue || !secondLastCardValue) {
-                        return prevFields;
+                        const updatedLastCard = {
+                            ...lastCard,
+                            logicValue: multipliedValue.toString(),
+                        };
+    
+                        updatedFields[fieldIndex] = [
+                            ...field.slice(0, lastNumberIndex),
+                            updatedLastCard,
+                            ...field.slice(lastNumberIndex + 1),
+                            { ...selectedCard },
+                        ];
+                        cardWasPlaced = true;
+                    }
+                } else if (selectedCard.value === 'Q' && field.length > 0) {
+                    let lastNumberIndex = -1;
+    
+                    for (let i = field.length - 1; i >= 0; i--) {
+                        if (!isNaN(parseInt(field[i].value, 10))) {
+                            lastNumberIndex = i;
+                            break;
+                        }
                     }
     
-                    const isAscending = lastCardValue > secondLastCardValue;
-                    const reversedDirectionCard = { ...selectedCard, isAscending: !isAscending };
+                    if (lastNumberIndex !== -1) {
+                        const lastCardValue = parseInt(
+                            field[lastNumberIndex].logicValue || field[lastNumberIndex].value,
+                            10
+                        );
     
-                    updatedFields[fieldIndex] = [...field, reversedDirectionCard];
-                    cardWasPlaced = true;
+                        const secondLastCardValue =
+                            lastNumberIndex > 0
+                                ? parseInt(
+                                      field[lastNumberIndex - 1].logicValue ||
+                                          field[lastNumberIndex - 1].value,
+                                      10
+                                  )
+                                : null;
+    
+                        const isAscending =
+                            secondLastCardValue !== null
+                                ? secondLastCardValue < lastCardValue
+                                : true;
+    
+                        updatedFields[fieldIndex] = [
+                            ...field,
+                            { ...selectedCard, isAscending: !isAscending },
+                        ];
+                        cardWasPlaced = true;
+                    } else {
+                        // If no numbered card exists, just place the Q card
+                        updatedFields[fieldIndex] = [...field, { ...selectedCard }];
+                        cardWasPlaced = true;
+                    }
                 } else if (field.length > 1) {
                     const direction = field[field.length - 1].isAscending !== false;
                     const lastCardValue = parseInt(
@@ -141,48 +188,95 @@ function Layout({ selectedCards, imageMap }) {
                 let cardWasPlaced = false;
     
                 if (selectedCard.value === 'J' && field.length > 0) {
-                    updatedFields[fieldIndex] = field.slice(0, -1);
-                    cardWasPlaced = true;
+                    let lastNumberIndex = -1;
+    
+                    for (let i = field.length - 1; i >= 0; i--) {
+                        if (!isNaN(parseInt(field[i].value, 10))) {
+                            lastNumberIndex = i;
+                            break;
+                        }
+                    }
+    
+                    if (lastNumberIndex !== -1) {
+                        updatedFields[fieldIndex] = field.slice(0, lastNumberIndex).filter((card) => {
+                            const isNamedCard = ['J', 'K', 'Q'].includes(card.value);
+                            return !(isNamedCard && field.indexOf(card) < lastNumberIndex);
+                        });
+                        cardWasPlaced = true;
+                    }
                 } else if (selectedCard.value === 'K' && field.length > 0) {
-                    const lastCard = field[field.length - 1];
-                    const lastCardValue = parseInt(lastCard.logicValue || lastCard.value, 10);
+                    let lastNumberIndex = -1;
     
-                    if (!lastCardValue || isNaN(lastCardValue)) {
-                        return prevFields;
+                    for (let i = field.length - 1; i >= 0; i--) {
+                        if (!isNaN(parseInt(field[i].value, 10))) {
+                            lastNumberIndex = i;
+                            break;
+                        }
                     }
     
-                    const doubledValue = lastCardValue * 2;
+                    if (lastNumberIndex !== -1) {
+                        const lastCard = field[lastNumberIndex];
+                        const lastCardValue = parseInt(lastCard.logicValue || lastCard.value, 10);
     
-                    const updatedLastCard = {
-                        ...lastCard,
-                        logicValue: doubledValue.toString(),
-                    };
+                        if (!lastCardValue || isNaN(lastCardValue)) {
+                            return prevFields;
+                        }
     
-                    updatedFields[fieldIndex] = [
-                        ...field.slice(0, -1),
-                        updatedLastCard,
-                        { ...selectedCard },
-                    ];
-                    cardWasPlaced = true;
-                } else if (selectedCard.value === 'Q' && field.length > 1) {
-                    const lastCardValue = parseInt(
-                        field[field.length - 1].logicValue || field[field.length - 1].value,
-                        10
-                    );
-                    const secondLastCardValue = parseInt(
-                        field[field.length - 2].logicValue || field[field.length - 2].value,
-                        10
-                    );
+                        const multipliedValue = lastCardValue * 2;
     
-                    if (!lastCardValue || !secondLastCardValue) {
-                        return prevFields;
+                        const updatedLastCard = {
+                            ...lastCard,
+                            logicValue: multipliedValue.toString(),
+                        };
+    
+                        updatedFields[fieldIndex] = [
+                            ...field.slice(0, lastNumberIndex),
+                            updatedLastCard,
+                            ...field.slice(lastNumberIndex + 1),
+                            { ...selectedCard },
+                        ];
+                        cardWasPlaced = true;
+                    }
+                } else if (selectedCard.value === 'Q' && field.length > 0) {
+                    let lastNumberIndex = -1;
+    
+                    for (let i = field.length - 1; i >= 0; i--) {
+                        if (!isNaN(parseInt(field[i].value, 10))) {
+                            lastNumberIndex = i;
+                            break;
+                        }
                     }
     
-                    const isAscending = lastCardValue > secondLastCardValue;
-                    const reversedDirectionCard = { ...selectedCard, isAscending: !isAscending };
+                    if (lastNumberIndex !== -1) {
+                        const lastCardValue = parseInt(
+                            field[lastNumberIndex].logicValue || field[lastNumberIndex].value,
+                            10
+                        );
     
-                    updatedFields[fieldIndex] = [...field, reversedDirectionCard];
-                    cardWasPlaced = true;
+                        const secondLastCardValue =
+                            lastNumberIndex > 0
+                                ? parseInt(
+                                      field[lastNumberIndex - 1].logicValue ||
+                                          field[lastNumberIndex - 1].value,
+                                      10
+                                  )
+                                : null;
+    
+                        const isAscending =
+                            secondLastCardValue !== null
+                                ? secondLastCardValue < lastCardValue
+                                : true;
+    
+                        updatedFields[fieldIndex] = [
+                            ...field,
+                            { ...selectedCard, isAscending: !isAscending },
+                        ];
+                        cardWasPlaced = true;
+                    } else {
+                        // If no numbered card exists, just place the Q card
+                        updatedFields[fieldIndex] = [...field, { ...selectedCard }];
+                        cardWasPlaced = true;
+                    }
                 } else if (field.length > 1) {
                     const direction = field[field.length - 1].isAscending !== false;
                     const lastCardValue = parseInt(
