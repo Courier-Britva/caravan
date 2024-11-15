@@ -20,38 +20,7 @@ function Layout({ selectedCards, imageMap }) {
             )
         );
     };
-
-    const handleEnemyFieldClick = (fieldIndex) => {
-        if (selectedCard) {
-            setEnemyFields((prevFields) => {
-                const updatedFields = [...prevFields];
-    
-                if (
-                    updatedFields[fieldIndex].length === 0 &&
-                    ['J', 'K', 'Q'].includes(selectedCard.value)
-                ) {
-                    return prevFields;
-                }
-    
-                updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
-    
-                for (let i = 0; i < updatedFields.length; i++) {
-                    const sum = updatedFields[i].reduce(
-                        (acc, card) => acc + (parseInt(card.value, 10) || 0),
-                        0
-                    );
-                    if (sum > 26) {
-                        updatedFields[i] = [];
-                    }
-                }
-    
-                removeCardFromInventory(selectedCard);
-                setSelectedCard(null);
-    
-                return updatedFields;
-            });
-        }
-    };
+;
 
     
     const handlePlayerFieldClick = (fieldIndex) => {
@@ -66,7 +35,11 @@ function Layout({ selectedCards, imageMap }) {
                     return prevFields;
                 }
     
-                updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+                if (selectedCard.value === 'J' && updatedFields[fieldIndex].length > 0) {
+                    updatedFields[fieldIndex].pop();
+                } else {
+                    updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+                }
     
                 for (let i = 0; i < updatedFields.length; i++) {
                     const sum = updatedFields[i].reduce(
@@ -78,13 +51,50 @@ function Layout({ selectedCards, imageMap }) {
                     }
                 }
     
-                removeCardFromInventory(selectedCard);
-                setSelectedCard(null);
+                return updatedFields;
+            });
+    
+            removeCardFromInventory(selectedCard); // Ensure the card is removed from inventory
+            setSelectedCard(null);
+        }
+    };
+    const handleEnemyFieldClick = (fieldIndex) => {
+        if (selectedCard) {
+            setEnemyFields((prevFields) => {
+                const updatedFields = [...prevFields];
+    
+                if (
+                    updatedFields[fieldIndex].length === 0 &&
+                    ['J', 'K', 'Q'].includes(selectedCard.value)
+                ) {
+                    return prevFields;
+                }
+    
+                if (selectedCard.value === 'J' && updatedFields[fieldIndex].length > 0) {
+                    updatedFields[fieldIndex].pop();
+                } else {
+                    updatedFields[fieldIndex] = [...updatedFields[fieldIndex], selectedCard];
+                }
+    
+                for (let i = 0; i < updatedFields.length; i++) {
+                    const sum = updatedFields[i].reduce(
+                        (acc, card) => acc + (parseInt(card.value, 10) || 0),
+                        0
+                    );
+                    if (sum > 26) {
+                        updatedFields[i] = [];
+                    }
+                }
     
                 return updatedFields;
             });
+    
+            removeCardFromInventory(selectedCard); // Ensure the card is removed from inventory
+            setSelectedCard(null);
         }
     };
+    
+    
     
     
 
