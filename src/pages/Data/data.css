@@ -12,7 +12,7 @@
 
 .data_head{
     position: fixed;
-    top: 20px;
+    top: 10px;
     justify-content: flex-end;
     display: flex;
     gap: 24px;

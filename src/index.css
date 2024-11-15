@@ -66,41 +66,6 @@ p,span{
   height: 100vh;
 }
 
-.overlay {
-  height: 1px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-}
-
-.overlay:before {
-  background: linear-gradient(#262803 50%, rgba(16, 16, 16, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.03));
-  background-size: 100% 3px, 6px 100%;
-  content: "";
-  display: block;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-  border: 20px solid #181109;
-}
-  
-.overlay:after {
-  content: "";
-  display: block;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-}
-
 .note_element{
   max-width: 680px;
   width: 100%;
@@ -153,4 +118,6 @@ p,span{
   bottom: 0;
   left: 0;
   z-index: 2;
+  background-image: url(./img/bg.png);
+  background-size: 100% 100%;
 }
